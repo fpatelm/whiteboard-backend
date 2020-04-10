@@ -3,7 +3,7 @@ import path from "path"
 import http from "http"
 import socketIO from "socket.io"
 import * as firebase from "firebase-admin"
-import * as serviceAccount from "./serviceAccountKey.json"
+//import * as serviceAccount from "./serviceAccountKey.json"
 const port: number = 8080
 
 class App {
@@ -41,6 +41,20 @@ class App {
     }
 
     initializeFirbase() {
+
+        const params = {
+            type: process.env.type,
+            projectId: process.env.project_id,
+            privateKeyId: process.env.private_key_id,
+            privateKey: process.env.private_key,
+            clientEmail: process.env.client_email,
+            clientId: process.env.client_id,
+            authUri: process.env.auth_uri,
+            tokenUri: process.env.token_uri,
+            authProviderX509CertUrl: process.env.auth_provider_x509_cert_url,
+            clientC509CertUrl: process.env.client_x509_cert_url
+          }
+          /*
         const params = {
             type: serviceAccount.type,
             projectId: serviceAccount.project_id,
@@ -52,7 +66,7 @@ class App {
             tokenUri: serviceAccount.token_uri,
             authProviderX509CertUrl: serviceAccount.auth_provider_x509_cert_url,
             clientC509CertUrl: serviceAccount.client_x509_cert_url
-          }
+          }*/
 
 
         firebase.initializeApp({
