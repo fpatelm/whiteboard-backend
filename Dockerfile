@@ -3,6 +3,7 @@ WORKDIR /usr/src/app
 COPY src ./src/
 COPY dist ./dist/
 COPY *.json ./
+COPY *.yml ./
 RUN ls -a
 RUN npm install -g typescript
 RUN npm install socket.io
