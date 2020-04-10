@@ -78,7 +78,7 @@ class App {
 
     }
 
-    constructor(port: number) {
+    constructor(port) {
         this.port = port
         const app = express();
         this.server = new http.Server();
@@ -96,4 +96,4 @@ class App {
     }
 }
 
-new App(port).Start()
+new App(process.env.PORT || port).Start()
