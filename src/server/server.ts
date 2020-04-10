@@ -82,7 +82,7 @@ class App {
         this.port = port
         const app = express();
         this.server = new http.Server();
-        this.io = socketIO(this.server,{serveClient:false});
+        this.io = socketIO(this.server,{serveClient:false, origins: '*:*'});
         this.registerEvents();
         this.initializeFirbase();    
     }
