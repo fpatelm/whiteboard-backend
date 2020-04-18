@@ -3,6 +3,7 @@ import path from "path"
 import http from "http"
 import socketIO from "socket.io"
 import * as firebase from "firebase-admin"
+import * as dotenv from "dotenv"
 //import * as serviceAccount from "./serviceAccountKey.json"
 const port: number = 8080
 
@@ -14,10 +15,10 @@ class App {
 
     registerEvents() {
         this.io.on('connection', (socket: socketIO.Socket) => {
-            console.log('a user connected : ' + socket.id)
+            console.log('a socket id connected : ' + socket.id)
             
             socket.on('disconnect', function () {
-                console.log('socket disconnected : ' + socket.id);
+                console.log('socket id disconnected : ' + socket.id);
             });   
 
             socket.on("message", (m: Object) => {
@@ -27,16 +28,28 @@ class App {
             socket.on('mouseup', (m: Object) => {
                 console.log("[server](mouseup)");
                 socket.broadcast.emit('mouseup', undefined);
+                //xfirestore().collection('messages').doc('payload').collection('points').add({status:'NULL'});
             });  
             socket.on("clear", (m: Object) => {
                 console.log("[server](clear)");
                 socket.broadcast.emit('clear', undefined);
+                //firebase.firestore().collection('messages').doc('payload').delete();
               });
             socket.on("chat", (m: Object) => {
                 console.log("[server](chat): %s", JSON.stringify(m));
                 socket.broadcast.emit('broadcast', m);
+                //firebase.firestore().collection('messages').doc('payload').collection('points').add(m)
             //this.io.emit("chat", m);
             });
+            socket.on("userid", (m: Object) => {
+                console.log("[server](userid): %s", JSON.stringify(m));
+                //collection(JSON.stringify(m)).add({socketid:socket.id});
+                firebase.firestore().collection('users').doc(JSON.stringify(m)).set({socketid:socket.id});
+                socket.broadcast.emit('usersaved', m);
+            //this.io.emit("chat", m);
+            });
+
+        
         })
     }
 
@@ -74,15 +87,14 @@ class App {
             databaseURL: "https://midyear-nebula-113706.firebaseio.com"
           });
 
-          firebase.firestore().collection('messages').doc('payload').set({key:"value"}).then(() => {})
-
     }
 
     constructor(port) {
+        dotenv.config()
         this.port = port
         const app = express();
         this.server = new http.Server();
-        this.io = socketIO(this.server,{serveClient:false, origins: '*:*'});
+        this.io = socketIO(this.server,{serveClient: false, origins: '*:*'});
         this.registerEvents();
         this.initializeFirbase();    
     }
