@@ -4,7 +4,7 @@ COPY src ./src/
 COPY dist ./dist/
 COPY *.json ./
 RUN ls -a
-RUN npm install -g typescript
+RUN npm install -g typescript@2.7
 RUN npm install socket.io
 RUN npm install @types/socket.io
 RUN npm i ts-node
