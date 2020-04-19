@@ -27,7 +27,7 @@ class App {
             });
             socket.on('mouseup', (m: Object) => {
                 console.log("[server](mouseup)");
-                socket.broadcast.emit('mouseup', undefined);
+                socket.broadcast.emit('mouseup', m);
                 //xfirestore().collection('messages').doc('payload').collection('points').add({status:'NULL'});
             });  
             socket.on("clear", (m: Object) => {
